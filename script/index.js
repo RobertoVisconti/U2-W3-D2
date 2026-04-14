@@ -7,22 +7,35 @@ const STORAGE_KEY = "user_data";
 
 const loadList = () => {
   const data = localStorage.getItem(STORAGE_KEY);
-
   list.innerHTML = "";
 
   if (data) {
     const users = JSON.parse(data);
 
-    users.forEach((user) => {
+    users.forEach((user, index) => {
       list.innerHTML += `
             <li class="list-group-item d-flex justify-content-between align-items-center mb-2">
                 <div>
                     <strong>${user.firstName} ${user.lastName}</strong><br>
                     <small>Age: ${user.age} | Nationality: ${user.location}</small>
                 </div>
-                <span class="badge bg-primary rounded-pill">Saved</span>
+                <button class="btn btn-outline-danger btn-sm bi bi-trash" onclick="removeUser(${index})">
+                </button>
             </li> `;
     });
+  }
+};
+
+window.removeUser = (index) => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  if (data) {
+    let users = JSON.parse(data);
+
+    users.splice(index, 1);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+    loadList();
   }
 };
 
